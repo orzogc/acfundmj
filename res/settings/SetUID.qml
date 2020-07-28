@@ -25,7 +25,7 @@ Dialog {
         anchors.centerIn: parent
 
         Text {
-            text: "请输入直播间uid："
+            text: "请输入主播uid："
         }
 
         Rectangle {

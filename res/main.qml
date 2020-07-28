@@ -287,7 +287,7 @@ Window {
         Menu {
             id: rightClickMenu
             MenuItem {
-                text: "输入直播间uid"
+                text: "输入主播uid"
                 onTriggered: setUID.open()
             }
             MenuItem {
