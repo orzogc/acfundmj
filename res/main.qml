@@ -253,6 +253,8 @@ Window {
                 width: parent.width
                 leftPadding: 15
                 rightPadding: 15
+                //readOnly: true
+                //selectByMouse: true
                 wrapMode: Text.Wrap
                 textFormat: Text.RichText
                 font: generalFont
@@ -267,6 +269,7 @@ Window {
         }
     }
 
+    /*
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
@@ -278,6 +281,7 @@ Window {
             dmj.y += delta.y
         }
     }
+    */
 
     MouseArea {
         anchors.fill: parent
