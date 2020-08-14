@@ -14,7 +14,7 @@ Window {
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint
 
     property bool alwaysOnTop: false
     property bool mergeGift: true
@@ -381,7 +381,8 @@ Window {
 
     Text {
         id: hintText
-        anchors.centerIn: parent
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
         font.pointSize: 20
         text: "AcFun 弹幕姬"
     }

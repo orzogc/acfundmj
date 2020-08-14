@@ -3,6 +3,7 @@ qamel-*.go
 *.h
 *.cpp
 *.qmlproject*
+*.7z
 
 # Binaries for programs and plugins
 *.exe
