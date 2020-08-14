@@ -12,7 +12,7 @@ Window {
     height: 800
     minimumWidth: 100
     minimumHeight: 100
-    color: "#50808080"
+    color: "#00000000"
     flags: Qt.Window
 
     property bool alwaysOnTop: false
@@ -69,7 +69,7 @@ Window {
                 danmuModel.insert(0, {bgColor: false,
                                       time: 0, uid: 0, gid: 0,
                                       danmuUser: danmu,
-                                      danmuOther: "", image: "", imageHeight: 0,
+                                      danmuOther: "", image: "",
                                       animation: false})
                 return
             }
@@ -81,7 +81,7 @@ Window {
                                       gid: 0,
                                       danmuUser: data.Nickname,
                                       danmuOther: "：" + data.Comment,
-                                      image: "", imageHeight: 0,
+                                      image: "",
                                       animation: false})
                 break
             case 1:
@@ -91,9 +91,8 @@ Window {
                                           uid: data.UserID,
                                           gid: 0,
                                           danmuUser: data.Nickname,
-                                          danmuOther: " 点赞了",
-                                          image: dmj.lovePic,
-                                          imageHeight: 24,
+                                          danmuOther: " 点赞了爱心",
+                                          image: "",
                                           animation: false})
                 }
                 break
@@ -105,7 +104,7 @@ Window {
                                           gid: 0,
                                           danmuUser: data.Nickname,
                                           danmuOther: " 进入直播间",
-                                          image: "", imageHeight: 0,
+                                          image: "",
                                           animation: false})
                 }
                 break
@@ -117,7 +116,7 @@ Window {
                                           gid: 0,
                                           danmuUser: data.Nickname,
                                           danmuOther: " 关注了主播",
-                                          image: "", imageHeight: 0,
+                                          image: "",
                                           animation: false})
                 }
                 break
@@ -129,14 +128,16 @@ Window {
                                           gid: 0,
                                           danmuUser: data.Nickname,
                                           danmuOther: " 送出 " + data.BananaCount + " 个香蕉",
-                                          image: "", imageHeight: 0,
+                                          image: "",
                                           animation: false})
                 }
                 break
             case 5:
                 if (!banGift) {
                     if (mergeGift && data.Gift.Combo > 1) {
+                        // 出现连击
                         if (comboGift.has(data.UserID)) {
+                            // 已有连击记录
                             var giftInfo = comboGift.get(data.UserID)
                             if (data.Gift.Combo > giftInfo[0]) {
                                 timers[giftInfo[1]].restart()
@@ -148,12 +149,12 @@ Window {
                                                    danmuUser: data.Nickname,
                                                    danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                                    image: data.Gift.SmallPngPic,
-                                                   imageHeight: 48,
                                                    animation: true})
                                 comboGift.set(data.UserID, [data.Gift.Combo, giftInfo[1]])
                                 break
                             }
                         } else {
+                            // 没有连击记录
                             comboGift.set(data.UserID, [data.Gift.Combo, comboNum])
                             for (var n=0; n<danmuModel.count; n++) {
                                 var model = danmuModel.get(n)
@@ -179,12 +180,12 @@ Window {
                                                   danmuUser: data.Nickname,
                                                   danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                                   image: data.Gift.SmallPngPic,
-                                                  imageHeight: 48,
                                                   animation: true})
                             comboNum ++
                             break
                         }
                     } else {
+                        // 没有连击
                         danmuModel.insert(comboNum, {bgColor: true,
                                               time: data.SendTime,
                                               uid: data.UserID,
@@ -192,7 +193,6 @@ Window {
                                               danmuUser: data.Nickname,
                                               danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                               image: data.Gift.SmallPngPic,
-                                              imageHeight: 48,
                                               animation: false})
                     }
                 }
@@ -262,7 +262,7 @@ Window {
                 property string imgstyle: `<style>img{vertical-align:bottom;}`
                 property string userStyle: `user{color:${dmj.generalUserColor};}`
                 property string otherStyle: `other{color:${dmj.generalOtherColor};}</style>`
-                property string imageStr: image === "" || !dmj.showPic ? "" : `<img src="` + image + `" height="` + imageHeight +`">`
+                property string imageStr: image === "" || !dmj.showPic ? "" : `<img src="` + image +`">`
 
                 text: imgstyle + userStyle + otherStyle + `<user>` + danmuUser + `</user><other>` + danmuOther +`</other>` + imageStr
             }
@@ -339,7 +339,7 @@ Window {
             MenuItem {
                 checkable: true
                 checked: showPic
-                text: "显示点赞爱心和礼物图片"
+                text: "显示礼物图片"
                 onToggled: showPic = checked
             }
             MenuItem {
@@ -387,13 +387,4 @@ Window {
     Config {
         id: config
     }
-
-    /*
-    Resize {
-        anchors.fill: parent
-        size: 5
-    }
-    */
-
-    property string lovePic: `data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDY0ICg5MzUzNykgLSBodHRwczovL3NrZXRjaC5jb20gLS0+CiAgICA8dGl0bGU+aGFydDwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCB4MT0iMTcuMzEzMjk4MSUiIHkxPSI5LjY1MjEyMDI2JSIgeDI9IjcyLjgzODEwNSUiIHkyPSI3Ny44NTY5Nzk3JSIgaWQ9ImxpbmVhckdyYWRpZW50LTEiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjRkY4Mzk1IiBvZmZzZXQ9IjAlIj48L3N0b3A+CiAgICAgICAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNGRDRDNUMiIG9mZnNldD0iMTAwJSI+PC9zdG9wPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8L2RlZnM+CiAgICA8ZyBpZD0iaGFydCIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgaWQ9IlBhZ2UtMS1Db3B5Ij4KICAgICAgICAgICAgPGc+CiAgICAgICAgICAgICAgICA8cmVjdCBpZD0iTWFzayIgZmlsbD0iI0Q4RDhEOCIgb3BhY2l0eT0iMCIgeD0iLTYuMjUyNzc2MDdlLTEzIiB5PSIwIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiPjwvcmVjdD4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0xNi4wNSw0LjI1IEMxNC41NTc2Nzg5LDQuMjUgMTMuMTI1ODcwNSw0Ljk1Mjc3Mzc4IDExLjgwODgyMiw2LjA2MjAyNTQxIEMxMC44NzQxMjk1LDQuOTUyNzczNzggOS40NDIzMjExLDQuMjUgNy45NSw0LjI1IEM2LjYzNDMwNzM2LDQuMjUgNS40NTkxNTM3MSw0Ljc3MTY0MjA4IDQuNjEzMjA1OTIsNS42MjY1NTQxNCBDMy43NjYzMTgyOCw2LjQ4MjQxNiAzLjI1LDcuNjcxNDU0MjcgMy4yNSw5LjAwMjQ1MzcgQzMuMjUsMTEuOTk1NTI4NyA1LjY1MzA4NTQ5LDE0LjExMTk0MzYgOS4zNDY0NDUyOCwxNy40NTE1NzY3IEM5LjgzMDQ3ODIzLDE3Ljg4OTI1MiAxMC4zMzcwMjMzLDE4LjM0NzI4NTcgMTAuODYzOTA1LDE4LjgzMDEyMjcgTDEyLjMzNTg1MTMsMTkuNTQxODk2NSBMMTMuMTQwMDM2NSwxOC44MzU2ODIyIEMxMy42NjgyMTgsMTguMzUwNTMzNSAxNC4xNzk3Nzg4LDE3Ljg4NzEwNjUgMTQuNjY4MzM3OCwxNy40NDQ1MTkzIEMxOC4zNTMyNzc4LDE0LjEwNjMyMDIgMjAuNzUsMTEuOTkxNTQ2NyAyMC43NSw5LjAwMjQ1MzcgQzIwLjc1LDcuNjcxNDU0MjcgMjAuMjMzNjgxNyw2LjQ4MjQxNiAxOS4zODY3OTQxLDUuNjI2NTU0MTQgQzE4LjU0MDg0NjMsNC43NzE2NDIwOCAxNy4zNjU2OTI2LDQuMjUgMTYuMDUsNC4yNSBaIiBpZD0iTWFzayIgc3Ryb2tlPSIjMTgxNzFBIiBzdHJva2Utd2lkdGg9IjAuNSIgZmlsbD0idXJsKCNsaW5lYXJHcmFkaWVudC0xKSI+PC9wYXRoPgogICAgICAgICAgICAgICAgPGVsbGlwc2UgaWQ9Ik92YWwiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuNSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNi42NjY2NjcsIDYuODMzMzMzKSByb3RhdGUoNTEuMDAwMDAwKSB0cmFuc2xhdGUoLTYuNjY2NjY3LCAtNi44MzMzMzMpICIgY3g9IjYuNjY2NjY2NjciIGN5PSI2LjgzMzMzMzMzIiByeD0iMSIgcnk9IjEuMTY2NjY2NjciPjwvZWxsaXBzZT4KICAgICAgICAgICAgICAgIDxlbGxpcHNlIGlkPSJPdmFsLUNvcHktMiIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC4zMDA5NDQwMSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNS4wMDAwMDAsIDkuODMzMzMzKSByb3RhdGUoLTcuMDAwMDAwKSB0cmFuc2xhdGUoLTUuMDAwMDAwLCAtOS44MzMzMzMpICIgY3g9IjUiIGN5PSI5LjgzMzMzMzMzIiByeD0iMSIgcnk9IjEiPjwvZWxsaXBzZT4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+`
 }
