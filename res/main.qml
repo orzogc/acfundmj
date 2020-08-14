@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 1.4
 import Qt.labs.settings 1.0
+import "frameless"
 import "settings"
 import BackEnd 1.0 as BackEnd
 
@@ -13,7 +14,7 @@ Window {
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: Qt.Window
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint
 
     property bool alwaysOnTop: false
     property bool mergeGift: true
@@ -209,9 +210,15 @@ Window {
 
     ListView {
         id: danmuList
-        width: parent.width
-        height: parent.height - 20
-        anchors.centerIn: parent
+        //width: parent.width
+        //height: parent.height - 20
+        //anchors.centerIn: parent
+        anchors {
+            top: topBar.bottom
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
         verticalLayoutDirection: ListView.BottomToTop
         spacing: 3
         model: ListModel {
@@ -284,7 +291,12 @@ Window {
     */
 
     MouseArea {
-        anchors.fill: parent
+        anchors {
+            top: topBar.bottom
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
         acceptedButtons: Qt.RightButton
         onClicked: rightClickMenu.popup()
 
@@ -386,5 +398,32 @@ Window {
 
     Config {
         id: config
+    }
+
+    property point startMousePos
+    property point startWindowPos
+    property size startWindowSize
+
+    function absoluteMousePos(mouseArea) {
+        var windowAbs = mouseArea.mapToItem(null, mouseArea.mouseX, mouseArea.mouseY)
+        return Qt.point(windowAbs.x + dmj.x, windowAbs.y + dmj.y)
+    }
+
+    TopBar {
+        id: topBar
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+
+        height: 25
+        color: "black"
+        smooth: true
+    }
+
+    ResizingFrames {
+        anchors.fill: parent
+        size: 3
     }
 }
