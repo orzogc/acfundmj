@@ -9,6 +9,8 @@ Dialog {
     title: "设置"
     standardButtons: StandardButton.Ok | StandardButton.Cancel
 
+    property int giftPicHeight: 60
+
     TabView {
         anchors.fill: parent
 
@@ -87,6 +89,38 @@ Dialog {
                         onClicked: giftBackgroundColor.open()
                     }
                 }
+
+                Row {
+                    spacing: 10
+                    leftPadding: 20
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "礼物图片高度："
+                    }
+                    Rectangle {
+                        width: inputHeight.contentWidth < 30 ? 30 : inputHeight.contentWidth + 10
+                        height: inputHeight.contentHeight + 5
+
+                        TextInput {
+                            id: inputHeight
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            validator: IntValidator {
+                                bottom: 1
+                                top: 1000
+                            }
+                            selectByMouse: true
+
+                            Component.onCompleted: {
+                                if (dmj.giftPicHeight > 0) {
+                                    insert(0, dmj.giftPicHeight)
+                                }
+                            }
+
+                            onTextChanged: giftPicHeight = text
+                        }
+                    }
+                }
             }
         }
     }
@@ -105,6 +139,7 @@ Dialog {
         dmj.generalUserColor = generalUserColor.color
         dmj.generalOtherColor = generalOtherColor.color
         dmj.giftBackgroundColor = giftBackgroundColor.color
+        dmj.giftPicHeight = giftPicHeight
     }
 
     ColorDialog {

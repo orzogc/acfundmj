@@ -8,5 +8,5 @@ require (
 	github.com/klauspost/compress v1.10.11 // indirect
 	github.com/orzogc/acfundanmu v0.0.0-20200812194219-c6549318f32a
 	github.com/sirupsen/logrus v1.6.0 // indirect
-	golang.org/x/sys v0.0.0-20200812155832-6a926be9bd1d // indirect
+	golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed // indirect
 )

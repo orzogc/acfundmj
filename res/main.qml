@@ -30,6 +30,7 @@ Window {
     property var generalUserColor: "#0000ff"
     property var generalOtherColor: "#000000"
     property var giftBackgroundColor: "#ff0000"
+    property int giftPicHeight: 60
 
     Settings {
         category: "General"
@@ -49,6 +50,7 @@ Window {
         property alias generalUserColor: dmj.generalUserColor
         property alias generalOtherColor: dmj.generalOtherColor
         property alias giftBackgroundColor: dmj.giftBackgroundColor
+        property alias giftPicHeight: dmj.giftPicHeight
     }
 
     BackEnd.Danmu {
@@ -92,7 +94,7 @@ Window {
                                           uid: data.UserID,
                                           gid: 0,
                                           danmuUser: data.Nickname,
-                                          danmuOther: " 点赞了爱心",
+                                          danmuOther: " 点赞了 爱心",
                                           image: "",
                                           animation: false})
                 }
@@ -210,9 +212,6 @@ Window {
 
     ListView {
         id: danmuList
-        //width: parent.width
-        //height: parent.height - 20
-        //anchors.centerIn: parent
         anchors {
             top: topBar.bottom
             bottom: parent.bottom
@@ -260,8 +259,6 @@ Window {
                 width: parent.width
                 leftPadding: 15
                 rightPadding: 15
-                //readOnly: true
-                //selectByMouse: true
                 wrapMode: Text.Wrap
                 textFormat: Text.RichText
                 font: generalFont
@@ -269,7 +266,7 @@ Window {
                 property string imgstyle: `<style>img{vertical-align:bottom;}`
                 property string userStyle: `user{color:${dmj.generalUserColor};}`
                 property string otherStyle: `other{color:${dmj.generalOtherColor};}</style>`
-                property string imageStr: image === "" || !dmj.showPic ? "" : `<img src="` + image +`">`
+                property string imageStr: image === "" || !dmj.showPic ? "" : `<img src="` + image + `" height="` + dmj.giftPicHeight + `">`
 
                 text: imgstyle + userStyle + otherStyle + `<user>` + danmuUser + `</user><other>` + danmuOther +`</other>` + imageStr
             }

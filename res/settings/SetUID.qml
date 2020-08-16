@@ -11,7 +11,7 @@ Dialog {
     property int uid: 0
 
     onAccepted: {
-        uid = input.getText(0,12)
+        uid = inputUID.text
         if (uid > 0){
             if (backEnd.started) {
                 backEnd.stop()
@@ -29,11 +29,11 @@ Dialog {
         }
 
         Rectangle {
-            width: input.contentWidth < 100 ? 100 : input.contentWidth + 10
-            height: input.contentHeight + 5
+            width: inputUID.contentWidth < 100 ? 100 : inputUID.contentWidth + 10
+            height: inputUID.contentHeight + 5
 
             TextInput {
-                id: input
+                id: inputUID
                 anchors.fill: parent
                 anchors.margins: 2
                 focus: true
@@ -58,15 +58,15 @@ Dialog {
                         id: textMenu
                         MenuItem {
                             text: "复制"
-                            onTriggered: input.copy()
+                            onTriggered: inputUID.copy()
                         }
                         MenuItem {
                             text: "剪切"
-                            onTriggered: input.cut()
+                            onTriggered: inputUID.cut()
                         }
                         MenuItem {
                             text: "粘贴"
-                            onTriggered: input.paste()
+                            onTriggered: inputUID.paste()
                         }
                     }
                 }
