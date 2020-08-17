@@ -62,9 +62,9 @@ Rectangle {
            hoverEnabled: true;
            onEntered: parent.color = "tomato"
            onExited: parent.color = "transparent"
-           onClicked: dmj.close()
            onPressed: parent.opacity = 0.6
            onReleased: parent.opacity = 1
+           onClicked: dmj.close()
         }
         Behavior on color {
             ColorAnimation { duration: 200 }

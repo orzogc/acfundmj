@@ -24,6 +24,7 @@ Window {
     property bool banFollow: false
     property bool banGift: false
     property bool showPic: true
+    property bool showAvatar: true
     property bool autoScroll: true
 
     property var generalFont: defaultText.font
@@ -44,6 +45,7 @@ Window {
         property alias banFollow: dmj.banFollow
         property alias banGift: dmj.banGift
         property alias showPic: dmj.showPic
+        property alias showAvatar: dmj.showAvatar
         property alias autoScroll: dmj.autoScroll
         property alias uid: setUID.uid
         property alias generalFont: dmj.generalFont
@@ -69,7 +71,8 @@ Window {
                     timers[i].stop()
                     timers[i].destroy()
                 }
-                danmuModel.insert(0, {bgColor: false,
+                danmuModel.insert(0, {avatar: "",
+                                      bgColor: false,
                                       time: 0, uid: 0, gid: 0,
                                       danmuUser: danmu,
                                       danmuOther: "", image: "",
@@ -78,7 +81,8 @@ Window {
             }
             switch(data.Type) {
             case 0:
-                danmuModel.insert(comboNum, {bgColor: false,
+                danmuModel.insert(comboNum, {avatar: data.Avatar,
+                                      bgColor: false,
                                       time: data.SendTime,
                                       uid: data.UserID,
                                       gid: 0,
@@ -89,7 +93,8 @@ Window {
                 break
             case 1:
                 if (!banLike) {
-                    danmuModel.insert(comboNum, {bgColor: false,
+                    danmuModel.insert(comboNum, {avatar: data.Avatar,
+                                          bgColor: false,
                                           time: data.SendTime,
                                           uid: data.UserID,
                                           gid: 0,
@@ -101,7 +106,8 @@ Window {
                 break
             case 2:
                 if (!banEnter) {
-                    danmuModel.insert(comboNum, {bgColor: false,
+                    danmuModel.insert(comboNum, {avatar: data.Avatar,
+                                          bgColor: false,
                                           time: data.SendTime,
                                           uid: data.UserID,
                                           gid: 0,
@@ -113,7 +119,8 @@ Window {
                 break
             case 3:
                 if (!banFollow) {
-                    danmuModel.insert(comboNum, {bgColor: false,
+                    danmuModel.insert(comboNum, {avatar: data.Avatar,
+                                          bgColor: false,
                                           time: data.SendTime,
                                           uid: data.UserID,
                                           gid: 0,
@@ -125,7 +132,8 @@ Window {
                 break
             case 4:
                 if (!banGift) {
-                    danmuModel.insert(comboNum, {bgColor: true,
+                    danmuModel.insert(comboNum, {avatar: "",
+                                          bgColor: true,
                                           time: data.SendTime,
                                           uid: data.UserID,
                                           gid: 0,
@@ -145,7 +153,8 @@ Window {
                             if (data.Gift.Combo > giftInfo[0]) {
                                 timers[giftInfo[1]].restart()
                                 danmuModel.setProperty(giftInfo[1], "animation", false)
-                                danmuModel.set(giftInfo[1], {bgColor: true,
+                                danmuModel.set(giftInfo[1], {avatar: data.Avatar,
+                                                   bgColor: true,
                                                    time: data.SendTime,
                                                    uid: data.UserID,
                                                    gid: data.Gift.ID,
@@ -176,7 +185,8 @@ Window {
                             timer.index = comboNum
                             timer.start()
                             timers.push(timer)
-                            danmuModel.insert(comboNum, {bgColor: true,
+                            danmuModel.insert(comboNum, {avatar: data.Avatar,
+                                                  bgColor: true,
                                                   time: data.SendTime,
                                                   uid: data.UserID,
                                                   gid: data.Gift.ID,
@@ -189,7 +199,8 @@ Window {
                         }
                     } else {
                         // 没有连击
-                        danmuModel.insert(comboNum, {bgColor: true,
+                        danmuModel.insert(comboNum, {avatar: data.Avatar,
+                                              bgColor: true,
                                               time: data.SendTime,
                                               uid: data.UserID,
                                               gid: data.Gift.ID,
@@ -219,7 +230,7 @@ Window {
             right: parent.right
         }
         verticalLayoutDirection: ListView.BottomToTop
-        spacing: 3
+        spacing: 5
         model: ListModel {
             id: danmuModel
         }
@@ -254,10 +265,23 @@ Window {
                 }
             }
 
+            Image {
+                id: userAvatar
+                width: hintText.contentHeight
+                height: hintText.contentHeight
+                anchors.left: parent.left
+                anchors.leftMargin: 15
+                anchors.verticalCenter: parent.verticalCenter
+                source: avatar
+                visible: dmj.showAvatar
+            }
+
             Text {
                 id: danmuText
-                width: parent.width
-                leftPadding: 15
+                anchors.top: parent.top
+                anchors.left: dmj.showAvatar ? userAvatar.right : parent.left
+                anchors.right: parent.right
+                leftPadding: dmj.showAvatar ? 10 : 15
                 rightPadding: 15
                 wrapMode: Text.Wrap
                 textFormat: Text.RichText
@@ -353,6 +377,12 @@ Window {
             }
             MenuItem {
                 checkable: true
+                checked: showAvatar
+                text: "显示弹幕用户头像"
+                onToggled: showAvatar = checked
+            }
+            MenuItem {
+                checkable: true
                 checked: autoScroll
                 text: "自动滚动到最新弹幕位置"
                 onToggled: autoScroll = checked
@@ -380,7 +410,7 @@ Window {
         id: hintText
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        font.pointSize: 20
+        font: generalFont
         text: "AcFun 弹幕姬"
     }
 
