@@ -149,9 +149,9 @@ Window {
                 if (!banGift) {
                     if (mergeGift && data.Gift.Combo > 1) {
                         // 出现连击
-                        if (comboGift.has(data.UserID)) {
+                        var giftInfo = comboGift.get(data.UserID)
+                        if (comboGift.has(data.UserID) && giftInfo[2] === data.Gift.Count) {
                             // 已有连击记录
-                            var giftInfo = comboGift.get(data.UserID)
                             if (data.Gift.Combo > giftInfo[0]) {
                                 timers[giftInfo[1]].restart()
                                 danmuModel.setProperty(giftInfo[1], "animation", false)
@@ -164,12 +164,12 @@ Window {
                                                    danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                                    image: data.Gift.SmallPngPic,
                                                    animation: true})
-                                comboGift.set(data.UserID, [data.Gift.Combo, giftInfo[1]])
+                                comboGift.set(data.UserID, [data.Gift.Combo, giftInfo[1], data.Gift.Count])
                                 break
                             }
                         } else {
                             // 没有连击记录
-                            comboGift.set(data.UserID, [data.Gift.Combo, comboNum])
+                            comboGift.set(data.UserID, [data.Gift.Combo, comboNum, data.Gift.Count])
                             for (var n=0; n<danmuModel.count; n++) {
                                 var model = danmuModel.get(n)
                                 if ((data.SendTime - model.time) < 3500000000) {
@@ -181,7 +181,7 @@ Window {
                                     break
                                 }
                             }
-                            var timer = Qt.createQmlObject(`import QtQuick 2.15;Timer{id:danmuTimer;interval:3500;property var userID;property var index;onTriggered:{danmuModel.move(index,backEnd.comboNum-1,1);backEnd.comboNum--;backEnd.comboGift.delete(userID);backEnd.timers.splice(index,1);for(let [u,c] of backEnd.comboGift){if(c[1]>index){backEnd.comboGift.set(u,[c[0],c[1]-1])}}for(var i in backEnd.timers){if(i>=index){backEnd.timers[i].index=i}}danmuTimer.destroy();}}`,
+                            var timer = Qt.createQmlObject(`import QtQuick 2.15;Timer{id:danmuTimer;interval:3500;property var userID;property var index;onTriggered:{danmuModel.move(index,backEnd.comboNum-1,1);backEnd.comboNum--;backEnd.comboGift.delete(userID);backEnd.timers.splice(index,1);for(let [u,c] of backEnd.comboGift){if(c[1]>index){backEnd.comboGift.set(u,[c[0],c[1]-1,c[2]])}}for(var i in backEnd.timers){if(i>=index){backEnd.timers[i].index=i}}danmuTimer.destroy();}}`,
                                                            backEnd, "")
                             timer.userID = data.UserID
                             timer.index = comboNum
