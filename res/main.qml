@@ -14,7 +14,7 @@ Window {
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint
+    flags: frameless ? (alwaysOnTop ? (Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint) : (Qt.Window | Qt.FramelessWindowHint)) : (alwaysOnTop ? (Qt.Window | Qt.WindowStaysOnTopHint) : Qt.Window)
 
     property bool alwaysOnTop: false
     property bool mergeGift: true
@@ -32,6 +32,8 @@ Window {
     property var generalOtherColor: "#000000"
     property var giftBackgroundColor: "#ff0000"
     property int giftPicHeight: 60
+
+    property bool frameless: false
 
     Settings {
         category: "General"
@@ -224,7 +226,7 @@ Window {
     ListView {
         id: danmuList
         anchors {
-            top: topBar.bottom
+            top: frameless ? topBar.bottom : parent.top
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -243,8 +245,9 @@ Window {
             Rectangle {
                 id: backgroundRec
                 anchors.fill: parent
-                color: highlightGift && bgColor ? dmj.giftBackgroundColor : "#00000000"
+                color: dmj.giftBackgroundColor
                 radius: 20
+                visible: highlightGift && bgColor
 
                 SequentialAnimation {
                     running: animation
@@ -269,18 +272,22 @@ Window {
                 id: userAvatar
                 width: hintText.contentHeight
                 height: hintText.contentHeight
-                anchors.left: parent.left
-                anchors.leftMargin: 15
-                anchors.verticalCenter: parent.verticalCenter
+                anchors {
+                    left: parent.left
+                    leftMargin: 15
+                    verticalCenter: parent.verticalCenter
+                }
                 source: avatar
                 visible: dmj.showAvatar
             }
 
             Text {
                 id: danmuText
-                anchors.top: parent.top
-                anchors.left: dmj.showAvatar ? userAvatar.right : parent.left
-                anchors.right: parent.right
+                anchors {
+                    top: parent.top
+                    left: dmj.showAvatar ? userAvatar.right : parent.left
+                    right: parent.right
+                }
                 leftPadding: dmj.showAvatar ? 5 : 15
                 rightPadding: 15
                 wrapMode: Text.Wrap
@@ -297,27 +304,8 @@ Window {
         }
     }
 
-    /*
     MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton
-        property var clickPos
-        onPressed: clickPos = Qt.point(mouse.x, mouse.y)
-        onPositionChanged: {
-            var delta = Qt.point(mouse.x - clickPos.x, mouse.y - clickPos.y)
-            dmj.x += delta.x
-            dmj.y += delta.y
-        }
-    }
-    */
-
-    MouseArea {
-        anchors {
-            top: topBar.bottom
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-        }
+        anchors.fill: danmuList
         acceptedButtons: Qt.RightButton
         onClicked: rightClickMenu.popup()
 
@@ -332,6 +320,12 @@ Window {
                 checked: alwaysOnTop
                 text: "总是在其他窗口上面"
                 onToggled: alwaysOnTop = checked
+            }
+            MenuItem {
+                checkable: true
+                checked: frameless
+                text: "使用无边框窗口"
+                onToggled: frameless = checked
             }
             MenuItem {
                 checkable: true
@@ -398,14 +392,6 @@ Window {
         }
     }
 
-    onAlwaysOnTopChanged: {
-        if (alwaysOnTop) {
-            dmj.flags |= Qt.WindowStaysOnTopHint
-        } else {
-            dmj.flags &= ~Qt.WindowStaysOnTopHint
-        }
-    }
-
     Text {
         id: hintText
         anchors.bottom: parent.bottom
@@ -448,10 +434,12 @@ Window {
         height: 25
         color: "black"
         smooth: true
+        visible: frameless
     }
 
     ResizingFrames {
         anchors.fill: parent
-        size: 3
+        size: 5
+        visible: frameless
     }
 }
