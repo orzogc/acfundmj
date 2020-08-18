@@ -281,7 +281,7 @@ Window {
                 anchors.top: parent.top
                 anchors.left: dmj.showAvatar ? userAvatar.right : parent.left
                 anchors.right: parent.right
-                leftPadding: dmj.showAvatar ? 10 : 15
+                leftPadding: dmj.showAvatar ? 5 : 15
                 rightPadding: 15
                 wrapMode: Text.Wrap
                 textFormat: Text.RichText
@@ -348,25 +348,25 @@ Window {
             MenuItem {
                 checkable: true
                 checked: banLike
-                text: "屏蔽点赞信息"
+                text: "屏蔽点赞弹幕"
                 onToggled: banLike = checked
             }
             MenuItem {
                 checkable: true
                 checked: banEnter
-                text: "屏蔽进场信息"
+                text: "屏蔽进场弹幕"
                 onToggled: banEnter = checked
             }
             MenuItem {
                 checkable: true
                 checked: banFollow
-                text: "屏蔽关注信息"
+                text: "屏蔽关注弹幕"
                 onToggled: banFollow = checked
             }
             MenuItem {
                 checkable: true
                 checked: banGift
-                text: "屏蔽礼物信息"
+                text: "屏蔽礼物弹幕"
                 onToggled: banGift = checked
             }
             MenuItem {
