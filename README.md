@@ -1,5 +1,5 @@
 # acfundmj
-AcFun直播弹幕姬
+AcFun直播弹幕姬（测试用），如果要使用弹幕姬推荐使用 [aclivechat](https://github.com/ShigemoriHakura/aclivechat)
 
 ### 依赖
 * Qt >= 5.15
@@ -10,6 +10,7 @@ go get -u -d github.com/go-qamel/qamel
 go get -u github.com/go-qamel/qamel/cmd/qamel
 git clone https://github.com/orzogc/acfundmj.git
 cd acfundmj
+qamel profile setup
 qamel build
 ```
 
