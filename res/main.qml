@@ -14,7 +14,7 @@ Window {
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: frameless ? (alwaysOnTop ? (Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint) : (Qt.Window | Qt.FramelessWindowHint)) : (alwaysOnTop ? (Qt.Window | Qt.WindowStaysOnTopHint) : Qt.Window)
+    flags: alwaysOnTop ? (Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint) : (Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground)
 
     property bool alwaysOnTop: false
     property bool mergeGift: true
@@ -32,8 +32,6 @@ Window {
     property var generalOtherColor: "#000000"
     property var giftBackgroundColor: "#ff0000"
     property int giftPicHeight: 60
-
-    property bool frameless: false
 
     Settings {
         category: "General"
@@ -226,7 +224,7 @@ Window {
     ListView {
         id: danmuList
         anchors {
-            top: frameless ? topBar.bottom : parent.top
+            top: topBar.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -320,12 +318,6 @@ Window {
                 checked: alwaysOnTop
                 text: "总是在其他窗口上面"
                 onToggled: alwaysOnTop = checked
-            }
-            MenuItem {
-                checkable: true
-                checked: frameless
-                text: "使用无边框窗口"
-                onToggled: frameless = checked
             }
             MenuItem {
                 checkable: true
@@ -434,12 +426,10 @@ Window {
         height: 25
         color: "black"
         smooth: true
-        visible: frameless
     }
 
     ResizingFrames {
         anchors.fill: parent
         size: 5
-        visible: frameless
     }
 }

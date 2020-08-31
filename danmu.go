@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"log"
 
 	"github.com/go-qamel/qamel"
 	"github.com/orzogc/acfundanmu"
@@ -24,7 +25,10 @@ func (dm *Danmu) start(uid int) {
 		var ctx context.Context
 		ctx, cancel = context.WithCancel(context.Background())
 		defer cancel()
-		dq := acfundanmu.Start(ctx, uid)
+		dq, err := acfundanmu.Start(ctx, uid)
+		if err != nil {
+			log.Printf("获取弹幕出现错误：%v", err)
+		}
 		for {
 			if danmu := dq.GetDanmu(); danmu != nil {
 				for _, d := range danmu {
