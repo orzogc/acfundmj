@@ -73,7 +73,7 @@ Window {
                 }
                 danmuModel.insert(0, {avatar: "",
                                       bgColor: false,
-                                      time: 0, uid: 0, gid: 0,
+                                      time: 0, uid: 0, cid: "",
                                       danmuUser: danmu,
                                       danmuOther: "", image: "",
                                       animation: false})
@@ -85,7 +85,7 @@ Window {
                                       bgColor: false,
                                       time: data.SendTime,
                                       uid: data.UserID,
-                                      gid: 0,
+                                      cid: "",
                                       danmuUser: data.Nickname,
                                       danmuOther: "：" + data.Comment,
                                       image: "",
@@ -97,7 +97,7 @@ Window {
                                           bgColor: false,
                                           time: data.SendTime,
                                           uid: data.UserID,
-                                          gid: 0,
+                                          cid: "",
                                           danmuUser: data.Nickname,
                                           danmuOther: " 点赞了 爱心",
                                           image: "",
@@ -110,7 +110,7 @@ Window {
                                           bgColor: false,
                                           time: data.SendTime,
                                           uid: data.UserID,
-                                          gid: 0,
+                                          cid: "",
                                           danmuUser: data.Nickname,
                                           danmuOther: " 进入直播间",
                                           image: "",
@@ -123,7 +123,7 @@ Window {
                                           bgColor: false,
                                           time: data.SendTime,
                                           uid: data.UserID,
-                                          gid: 0,
+                                          cid: "",
                                           danmuUser: data.Nickname,
                                           danmuOther: " 关注了主播",
                                           image: "",
@@ -136,7 +136,7 @@ Window {
                                           bgColor: true,
                                           time: data.SendTime,
                                           uid: data.UserID,
-                                          gid: 0,
+                                          cid: "",
                                           danmuUser: data.Nickname,
                                           danmuOther: " 送出 " + data.BananaCount + " 个香蕉",
                                           image: "",
@@ -147,31 +147,28 @@ Window {
                 if (!banGift) {
                     if (mergeGift && data.Gift.Combo > 1) {
                         // 出现连击
-                        var giftInfo = comboGift.get(data.UserID)
-                        if (comboGift.has(data.UserID) && giftInfo[2] === data.Gift.Count) {
+                        if (comboGift.has(data.Gift.ComboID)) {
                             // 已有连击记录
-                            if (data.Gift.Combo > giftInfo[0]) {
-                                timers[giftInfo[1]].restart()
-                                danmuModel.setProperty(giftInfo[1], "animation", false)
-                                danmuModel.set(giftInfo[1], {avatar: data.Avatar,
-                                                   bgColor: true,
-                                                   time: data.SendTime,
-                                                   uid: data.UserID,
-                                                   gid: data.Gift.ID,
-                                                   danmuUser: data.Nickname,
-                                                   danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
-                                                   image: data.Gift.SmallPngPic,
-                                                   animation: true})
-                                comboGift.set(data.UserID, [data.Gift.Combo, giftInfo[1], data.Gift.Count])
-                                break
-                            }
+                            var giftInfo = comboGift.get(data.Gift.ComboID)
+                            timers[giftInfo].restart()
+                            danmuModel.setProperty(giftInfo, "animation", false)
+                            danmuModel.set(giftInfo, {avatar: data.Avatar,
+                                               bgColor: true,
+                                               time: data.SendTime,
+                                               uid: data.UserID,
+                                               cid: data.Gift.ComboID,
+                                               danmuUser: data.Nickname,
+                                               danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
+                                               image: data.Gift.SmallPngPic,
+                                               animation: true})
+                            break
                         } else {
                             // 没有连击记录
-                            comboGift.set(data.UserID, [data.Gift.Combo, comboNum, data.Gift.Count])
+                            comboGift.set(data.Gift.ComboID, comboNum)
                             for (var n=0; n<danmuModel.count; n++) {
                                 var model = danmuModel.get(n)
                                 if ((data.SendTime - model.time) < 3500000000) {
-                                    if (data.UserID === model.uid && data.Gift.ID === model.gid) {
+                                    if (data.UserID === model.uid && data.Gift.ComboID === model.cid) {
                                         danmuModel.remove(n)
                                         break
                                     }
@@ -179,9 +176,9 @@ Window {
                                     break
                                 }
                             }
-                            var timer = Qt.createQmlObject(`import QtQuick 2.15;Timer{id:danmuTimer;interval:3500;property var userID;property var index;onTriggered:{danmuModel.move(index,backEnd.comboNum-1,1);backEnd.comboNum--;backEnd.comboGift.delete(userID);backEnd.timers.splice(index,1);for(let [u,c] of backEnd.comboGift){if(c[1]>index){backEnd.comboGift.set(u,[c[0],c[1]-1,c[2]])}}for(var i in backEnd.timers){if(i>=index){backEnd.timers[i].index=i}}danmuTimer.destroy();}}`,
+                            var timer = Qt.createQmlObject(`import QtQuick 2.15;Timer{id:danmuTimer;interval:3500;property var comboID;property var index;onTriggered:{danmuModel.move(index,backEnd.comboNum-1,1);backEnd.comboNum--;backEnd.comboGift.delete(comboID);backEnd.timers.splice(index,1);for(let [u,c] of backEnd.comboGift){if(c>index){backEnd.comboGift.set(u,c-1)}}for(var i in backEnd.timers){if(i>=index){backEnd.timers[i].index=i}}danmuTimer.destroy();}}`,
                                                            backEnd, "")
-                            timer.userID = data.UserID
+                            timer.comboID = data.Gift.ComboID
                             timer.index = comboNum
                             timer.start()
                             timers.push(timer)
@@ -189,7 +186,7 @@ Window {
                                                   bgColor: true,
                                                   time: data.SendTime,
                                                   uid: data.UserID,
-                                                  gid: data.Gift.ID,
+                                                  cid: data.Gift.ComboID,
                                                   danmuUser: data.Nickname,
                                                   danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                                   image: data.Gift.SmallPngPic,
@@ -203,7 +200,7 @@ Window {
                                               bgColor: true,
                                               time: data.SendTime,
                                               uid: data.UserID,
-                                              gid: data.Gift.ID,
+                                              cid: data.Gift.ComboID,
                                               danmuUser: data.Nickname,
                                               danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                               image: data.Gift.SmallPngPic,
