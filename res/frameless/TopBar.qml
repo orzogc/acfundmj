@@ -64,7 +64,7 @@ Rectangle {
            onExited: parent.color = "transparent"
            onPressed: parent.opacity = 0.6
            onReleased: parent.opacity = 1
-           onClicked: dmj.close()
+           onClicked: Qt.quit()
         }
         Behavior on color {
             ColorAnimation { duration: 200 }

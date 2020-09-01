@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtQuick.Controls 1.4
 import Qt.labs.settings 1.0
+import Qt.labs.platform 1.1
 import "frameless"
 import "settings"
 import BackEnd 1.0 as BackEnd
@@ -53,6 +53,33 @@ Window {
         property alias generalOtherColor: dmj.generalOtherColor
         property alias giftBackgroundColor: dmj.giftBackgroundColor
         property alias giftPicHeight: dmj.giftPicHeight
+    }
+
+    SystemTrayIcon {
+        visible: true
+        icon.source: "acfunlogo.ico"
+        tooltip: "AcFun 弹幕姬"
+
+        onActivated: {
+            dmj.showNormal()
+            dmj.raise()
+            dmj.requestActivate()
+        }
+
+        menu: Menu {
+            MenuItem {
+                text: "关闭弹幕姬"
+                onTriggered: Qt.quit()
+            }
+            MenuItem{
+                text: "显示弹幕姬"
+                onTriggered: {
+                    dmj.showNormal()
+                    dmj.raise()
+                    dmj.requestActivate()
+                }
+            }
+        }
     }
 
     BackEnd.Danmu {
@@ -302,7 +329,7 @@ Window {
     MouseArea {
         anchors.fill: danmuList
         acceptedButtons: Qt.RightButton
-        onClicked: rightClickMenu.popup()
+        onClicked: rightClickMenu.open()
 
         Menu {
             id: rightClickMenu
@@ -314,61 +341,61 @@ Window {
                 checkable: true
                 checked: alwaysOnTop
                 text: "总是在其他窗口上面"
-                onToggled: alwaysOnTop = checked
+                onTriggered: alwaysOnTop = checked
             }
             MenuItem {
                 checkable: true
                 checked: mergeGift
                 text: "合并显示礼物连击弹幕"
-                onToggled: mergeGift = checked
+                onTriggered: mergeGift = checked
             }
             MenuItem {
                 checkable: true
                 checked: highlightGift
                 text: "高亮显示礼物弹幕"
-                onToggled: highlightGift = checked
+                onTriggered: highlightGift = checked
             }
             MenuItem {
                 checkable: true
                 checked: banLike
                 text: "屏蔽点赞弹幕"
-                onToggled: banLike = checked
+                onTriggered: banLike = checked
             }
             MenuItem {
                 checkable: true
                 checked: banEnter
                 text: "屏蔽进场弹幕"
-                onToggled: banEnter = checked
+                onTriggered: banEnter = checked
             }
             MenuItem {
                 checkable: true
                 checked: banFollow
                 text: "屏蔽关注弹幕"
-                onToggled: banFollow = checked
+                onTriggered: banFollow = checked
             }
             MenuItem {
                 checkable: true
                 checked: banGift
                 text: "屏蔽礼物弹幕"
-                onToggled: banGift = checked
+                onTriggered: banGift = checked
             }
             MenuItem {
                 checkable: true
                 checked: showPic
                 text: "显示礼物图片"
-                onToggled: showPic = checked
+                onTriggered: showPic = checked
             }
             MenuItem {
                 checkable: true
                 checked: showAvatar
                 text: "显示弹幕用户头像"
-                onToggled: showAvatar = checked
+                onTriggered: showAvatar = checked
             }
             MenuItem {
                 checkable: true
                 checked: autoScroll
                 text: "自动滚动到最新弹幕位置"
-                onToggled: autoScroll = checked
+                onTriggered: autoScroll = checked
             }
             MenuItem {
                 text: "更多设置"
@@ -376,7 +403,7 @@ Window {
             }
             MenuItem {
                 text: "关闭弹幕姬"
-                onTriggered: dmj.close()
+                onTriggered: Qt.quit()
             }
         }
     }
