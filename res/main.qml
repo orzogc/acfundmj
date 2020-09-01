@@ -126,7 +126,7 @@ Window {
                                           uid: data.UserID,
                                           cid: "",
                                           danmuUser: data.Nickname,
-                                          danmuOther: " 点赞了 爱心",
+                                          danmuOther: " 点赞了",
                                           image: "",
                                           animation: false})
                 }
@@ -413,6 +413,7 @@ Window {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         font: generalFont
+        color: generalUserColor
         text: "AcFun 弹幕姬"
     }
 

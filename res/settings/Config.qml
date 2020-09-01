@@ -1,15 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Dialogs 1.3
 import QtQuick.Controls 1.4
+import Qt.labs.platform 1.1 as Platform
 
 Dialog {
     id: configDialog
     width: 600
     height: 400
     title: "设置"
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
-
-    property int giftPicHeight: 60
+    standardButtons: StandardButton.Close
 
     TabView {
         anchors.fill: parent
@@ -117,7 +116,7 @@ Dialog {
                                 }
                             }
 
-                            onTextChanged: giftPicHeight = text
+                            onTextChanged: dmj.giftPicHeight = text
                         }
                     }
                 }
@@ -133,41 +132,38 @@ Dialog {
         giftBackgroundColor.color = dmj.giftBackgroundColor
     }
 
-    onAccepted: {
-        dmj.color = backgroundColor.color
-        dmj.generalFont = generalFont.font
-        dmj.generalUserColor = generalUserColor.color
-        dmj.generalOtherColor = generalOtherColor.color
-        dmj.giftBackgroundColor = giftBackgroundColor.color
-        dmj.giftPicHeight = giftPicHeight
-    }
-
-    ColorDialog {
+    Platform.ColorDialog {
         id: backgroundColor
         title: "选择弹幕姬背景颜色"
-        showAlphaChannel: true
+        options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        onCurrentColorChanged: dmj.color = currentColor
     }
 
-    FontDialog {
+    Platform.FontDialog {
         id: generalFont
         title: "选择弹幕字体"
+        options: Platform.FontDialog.NoButtons
+        onCurrentFontChanged: dmj.generalFont = currentFont
     }
 
-    ColorDialog {
+    Platform.ColorDialog {
         id: generalUserColor
         title: "选择弹幕里昵称的字体颜色"
-        showAlphaChannel: true
+        options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        onCurrentColorChanged: dmj.generalUserColor = currentColor
     }
 
-    ColorDialog {
+    Platform.ColorDialog {
         id: generalOtherColor
         title: "选择弹幕其余部分的字体颜色"
-        showAlphaChannel: true
+        options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        onCurrentColorChanged: dmj.generalOtherColor = currentColor
     }
 
-    ColorDialog {
+    Platform.ColorDialog {
         id: giftBackgroundColor
         title: "选择礼物弹幕高亮显示的背景颜色"
-        showAlphaChannel: true
+        options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        onCurrentColorChanged: dmj.giftBackgroundColor = currentColor
     }
 }
