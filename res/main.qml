@@ -14,7 +14,7 @@ Window {
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: alwaysOnTop ? (Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowStaysOnTopHint) : (Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground)
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint
 
     property bool alwaysOnTop: false
     property bool mergeGift: true
@@ -32,6 +32,8 @@ Window {
     property var generalOtherColor: "#000000"
     property var giftBackgroundColor: "#ff0000"
     property int giftPicHeight: 60
+
+    property bool lockWindow: false
 
     Settings {
         category: "General"
@@ -70,6 +72,12 @@ Window {
             MenuItem {
                 text: "关闭弹幕姬"
                 onTriggered: Qt.quit()
+            }
+            MenuItem {
+                checkable: true
+                checked: lockWindow
+                text: "锁定窗口，忽略鼠标点击"
+                onTriggered: lockWindow = checked
             }
             MenuItem{
                 text: "显示弹幕姬"
@@ -345,6 +353,12 @@ Window {
             }
             MenuItem {
                 checkable: true
+                checked: lockWindow
+                text: "锁定窗口，忽略鼠标点击"
+                onTriggered: lockWindow = checked
+            }
+            MenuItem {
+                checkable: true
                 checked: mergeGift
                 text: "合并显示礼物连击弹幕"
                 onTriggered: mergeGift = checked
@@ -405,6 +419,22 @@ Window {
                 text: "关闭弹幕姬"
                 onTriggered: Qt.quit()
             }
+        }
+    }
+
+    onAlwaysOnTopChanged: {
+        if (alwaysOnTop) {
+            dmj.flags |= Qt.WindowStaysOnTopHint
+        } else {
+            dmj.flags &= ~Qt.WindowStaysOnTopHint
+        }
+    }
+
+    onLockWindowChanged: {
+        if (lockWindow) {
+            dmj.flags |= Qt.WindowTransparentForInput
+        } else {
+            dmj.flags &= ~Qt.WindowTransparentForInput
         }
     }
 
