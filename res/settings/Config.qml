@@ -113,6 +113,19 @@ Dialog {
                 }
             }
         }
+
+        Row {
+            spacing: 10
+            leftPadding: 20
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "窗口边框颜色："
+            }
+            Button {
+                text: "设置"
+                onClicked: borderColor.open()
+            }
+        }
     }
 
     Component.onCompleted: {
@@ -121,6 +134,7 @@ Dialog {
         generalUserColor.color = dmj.generalUserColor
         generalOtherColor.color = dmj.generalOtherColor
         giftBackgroundColor.color = dmj.giftBackgroundColor
+        borderColor.color = dmj.borderColor
     }
 
     Platform.ColorDialog {
@@ -183,6 +197,20 @@ Dialog {
                 firstRun = false
             } else {
                 dmj.giftBackgroundColor = currentColor
+            }
+        }
+    }
+
+    Platform.ColorDialog {
+        id: borderColor
+        title: "选择窗口边框颜色"
+        options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        property bool firstRun: true
+        onCurrentColorChanged: {
+            if (firstRun) {
+                firstRun = false
+            } else {
+                dmj.borderColor = currentColor
             }
         }
     }

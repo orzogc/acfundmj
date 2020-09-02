@@ -4,7 +4,17 @@ import QtQuick 2.15
 Item {
     id: frame
     property Item content
-    property int size
+    property int size: 5
+
+    property point startMousePos
+    property point startWindowPos
+    property size startWindowSize
+
+    function absoluteMousePos(mouseArea) {
+        var windowAbs = mouseArea.mapToItem(null, mouseArea.mouseX, mouseArea.mouseY)
+        return Qt.point(windowAbs.x + dmj.x, windowAbs.y + dmj.y)
+    }
+
     MouseArea {
         id: resizeTopRight
         anchors{

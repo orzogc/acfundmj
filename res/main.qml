@@ -32,7 +32,9 @@ Window {
     property var generalOtherColor: "#000000"
     property var giftBackgroundColor: "#ff0000"
     property int giftPicHeight: 60
+    property var borderColor: "black"
 
+    property bool showBorder: true
     property bool lockWindow: false
 
     Settings {
@@ -55,6 +57,7 @@ Window {
         property alias generalOtherColor: dmj.generalOtherColor
         property alias giftBackgroundColor: dmj.giftBackgroundColor
         property alias giftPicHeight: dmj.giftPicHeight
+        property alias borderColor: dmj.borderColor
     }
 
     SystemTrayIcon {
@@ -255,12 +258,8 @@ Window {
 
     ListView {
         id: danmuList
-        anchors {
-            top: topBar.bottom
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-        }
+        anchors.fill: parent
+        anchors.margins: windowBorder.border.width
         verticalLayoutDirection: ListView.BottomToTop
         spacing: 5
         model: ListModel {
@@ -334,6 +333,28 @@ Window {
         }
     }
 
+    Rectangle {
+        id: windowBorder
+        anchors.fill: parent
+        border.color: borderColor
+        border.width: 3
+        color: "transparent"
+        visible: showBorder
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        anchors.margins: windowBorder.border.width
+        acceptedButtons: Qt.LeftButton
+        property var clickPos
+        onPressed: clickPos = Qt.point(mouse.x, mouse.y)
+        onPositionChanged: {
+            var delta = Qt.point(mouse.x - clickPos.x, mouse.y - clickPos.y)
+            dmj.x += delta.x
+            dmj.y += delta.y
+        }
+    }
+
     MouseArea {
         anchors.fill: danmuList
         acceptedButtons: Qt.RightButton
@@ -350,6 +371,12 @@ Window {
                 checked: alwaysOnTop
                 text: "总是在其他窗口上面"
                 onTriggered: alwaysOnTop = checked
+            }
+            MenuItem {
+                checkable: true
+                checked: showBorder
+                text: "显示窗口边框"
+                onTriggered: showBorder = checked
             }
             MenuItem {
                 checkable: true
@@ -440,8 +467,7 @@ Window {
 
     Text {
         id: hintText
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.centerIn: parent
         font: generalFont
         color: generalUserColor
         text: "AcFun 弹幕姬"
@@ -461,30 +487,8 @@ Window {
         id: config
     }
 
-    property point startMousePos
-    property point startWindowPos
-    property size startWindowSize
-
-    function absoluteMousePos(mouseArea) {
-        var windowAbs = mouseArea.mapToItem(null, mouseArea.mouseX, mouseArea.mouseY)
-        return Qt.point(windowAbs.x + dmj.x, windowAbs.y + dmj.y)
-    }
-
-    TopBar {
-        id: topBar
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-        }
-
-        height: 25
-        color: "black"
-        smooth: true
-    }
-
     ResizingFrames {
         anchors.fill: parent
-        size: 5
+        size: windowBorder.border.width
     }
 }
