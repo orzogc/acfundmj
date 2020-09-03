@@ -1,12 +1,12 @@
 import QtQuick 2.15
-import QtQuick.Window 2.15
+import QtQuick.Controls 2.15 as Control
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.1
 import "frameless"
 import "settings"
 import BackEnd 1.0 as BackEnd
 
-Window {
+Control.ApplicationWindow {
     id: dmj
     title: "AcFun 弹幕姬"
     visible: true
@@ -15,7 +15,7 @@ Window {
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint | Qt.WA_OpaquePaintEvent
 
     property bool alwaysOnTop: false
     property bool mergeGift: true
@@ -45,6 +45,7 @@ Window {
         property alias color: dmj.color
         property alias alwaysOnTop: dmj.alwaysOnTop
         property alias mergeGift: dmj.mergeGift
+        property alias highlightGift: dmj.highlightGift
         property alias banLike: dmj.banLike
         property alias banEnter: dmj.banEnter
         property alias banFollow: dmj.banFollow

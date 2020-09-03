@@ -30,9 +30,5 @@ func main() {
 
 	qamel.NewEngineWithSource("qrc:/res/main.qml")
 
-	//view := qamel.NewViewer()
-	//view.SetSource("qrc:/res/main.qml")
-	//view.SetResizeMode(qamel.SizeViewToRootObject)
-
 	app.Exec()
 }

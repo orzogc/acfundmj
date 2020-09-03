@@ -9,6 +9,7 @@ Dialog {
     height: 400
     title: "设置"
     standardButtons: StandardButton.Close
+    modality: Qt.NonModal
 
     Column {
         spacing: 5
@@ -141,6 +142,7 @@ Dialog {
         id: backgroundColor
         title: "选择弹幕姬背景颜色"
         options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        modality: Qt.NonModal
         property bool firstRun: true
         onCurrentColorChanged: {
             // 避免currentColor会忽略alpha通道的bug
@@ -156,6 +158,7 @@ Dialog {
         id: generalFont
         title: "选择弹幕字体"
         options: Platform.FontDialog.NoButtons
+        modality: Qt.NonModal
         onCurrentFontChanged: dmj.generalFont = currentFont
     }
 
@@ -163,6 +166,7 @@ Dialog {
         id: generalUserColor
         title: "选择弹幕里昵称的字体颜色"
         options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        modality: Qt.NonModal
         property bool firstRun: true
         onCurrentColorChanged: {
             if (firstRun) {
@@ -177,6 +181,7 @@ Dialog {
         id: generalOtherColor
         title: "选择弹幕其余部分的字体颜色"
         options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        modality: Qt.NonModal
         property bool firstRun: true
         onCurrentColorChanged: {
             if (firstRun) {
@@ -191,6 +196,7 @@ Dialog {
         id: giftBackgroundColor
         title: "选择礼物弹幕高亮显示的背景颜色"
         options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        modality: Qt.NonModal
         property bool firstRun: true
         onCurrentColorChanged: {
             if (firstRun) {
@@ -205,6 +211,7 @@ Dialog {
         id: borderColor
         title: "选择窗口边框颜色"
         options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        modality: Qt.NonModal
         property bool firstRun: true
         onCurrentColorChanged: {
             if (firstRun) {
