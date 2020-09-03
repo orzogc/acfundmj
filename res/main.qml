@@ -8,13 +8,14 @@ import BackEnd 1.0 as BackEnd
 
 Window {
     id: dmj
+    title: "AcFun 弹幕姬"
     visible: true
     width: 400
     height: 800
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground | Qt.CustomizeWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint
 
     property bool alwaysOnTop: false
     property bool mergeGift: true
@@ -62,11 +63,10 @@ Window {
 
     SystemTrayIcon {
         visible: true
-        icon.source: "acfunlogo.ico"
+        icon.source: "acfunlogo.png"
         tooltip: "AcFun 弹幕姬"
 
         onActivated: {
-            lockWindow = false
             dmj.showNormal()
             dmj.raise()
             dmj.requestActivate()
@@ -74,16 +74,6 @@ Window {
 
         menu: Menu {
             visible: false
-            MenuItem {
-                text: "关闭弹幕姬"
-                onTriggered: Qt.quit()
-            }
-            MenuItem {
-                checkable: true
-                checked: lockWindow
-                text: "锁定窗口，忽略鼠标点击"
-                onTriggered: lockWindow = checked
-            }
             MenuItem{
                 text: "显示弹幕姬"
                 onTriggered: {
@@ -91,6 +81,14 @@ Window {
                     dmj.raise()
                     dmj.requestActivate()
                 }
+            }
+            MenuItem {
+                text: "切换锁定状态"
+                onTriggered: lockWindow = !lockWindow
+            }
+            MenuItem {
+                text: "关闭弹幕姬"
+                onTriggered: Qt.quit()
             }
         }
     }

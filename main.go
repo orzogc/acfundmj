@@ -24,11 +24,15 @@ func main() {
 	app := qamel.NewApplication(len(os.Args), os.Args)
 	app.SetApplicationDisplayName("AcFun 弹幕姬")
 	app.SetApplicationName("AcFun 弹幕姬")
-	app.SetWindowIcon(":/res/acfunlogo.ico")
-	app.SetOrganizationDomain("https://github.com/orzogc")
+	app.SetWindowIcon(":/res/acfunlogo.png")
+	app.SetOrganizationDomain("https://github.com/orzogc/acfundmj")
 	app.SetOrganizationName("AcFun")
 
 	qamel.NewEngineWithSource("qrc:/res/main.qml")
+
+	//view := qamel.NewViewer()
+	//view.SetSource("qrc:/res/main.qml")
+	//view.SetResizeMode(qamel.SizeViewToRootObject)
 
 	app.Exec()
 }
