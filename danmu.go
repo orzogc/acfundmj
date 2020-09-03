@@ -28,6 +28,8 @@ func (dm *Danmu) start(uid int) {
 		dq, err := acfundanmu.Start(ctx, uid)
 		if err != nil {
 			log.Printf("获取弹幕出现错误：%v", err)
+			dm.newDanmu("停止获取弹幕")
+			return
 		}
 		for {
 			if danmu := dq.GetDanmu(); danmu != nil {

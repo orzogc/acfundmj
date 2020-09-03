@@ -2,6 +2,7 @@ acfundmj
 qamel-*.go
 *.h
 *.cpp
+*.syso
 *.qmlproject*
 *.7z
 

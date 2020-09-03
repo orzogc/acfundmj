@@ -66,12 +66,14 @@ Window {
         tooltip: "AcFun 弹幕姬"
 
         onActivated: {
+            lockWindow = false
             dmj.showNormal()
             dmj.raise()
             dmj.requestActivate()
         }
 
         menu: Menu {
+            visible: false
             MenuItem {
                 text: "关闭弹幕姬"
                 onTriggered: Qt.quit()
@@ -258,8 +260,13 @@ Window {
 
     ListView {
         id: danmuList
-        anchors.fill: parent
-        anchors.margins: windowBorder.border.width
+        anchors {
+            fill: parent
+            topMargin: windowBorder.border.width + 10
+            bottomMargin: windowBorder.border.width + 10
+            leftMargin: windowBorder.border.width
+            rightMargin: windowBorder.border.width
+        }
         verticalLayoutDirection: ListView.BottomToTop
         spacing: 5
         model: ListModel {
