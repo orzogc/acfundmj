@@ -5,8 +5,8 @@ import Qt.labs.platform 1.1 as Platform
 
 Dialog {
     id: configDialog
-    width: 600
-    height: 400
+    width: 400
+    height: 600
     title: "设置"
     standardButtons: StandardButton.Close
     modality: Qt.NonModal
@@ -36,7 +36,7 @@ Dialog {
             leftPadding: 20
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "弹幕字体："
+                text: "弹幕姬的字体："
             }
             Button {
                 text: "设置"
@@ -75,7 +75,20 @@ Dialog {
             leftPadding: 20
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "粉丝牌的字体颜色："
+                text: "直播间信息的字体颜色："
+            }
+            Button {
+                text: "设置"
+                onClicked: infoColor.open()
+            }
+        }
+
+        Row {
+            spacing: 10
+            leftPadding: 20
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "守护徽章的字体颜色："
             }
             Button {
                 text: "设置"
@@ -147,6 +160,7 @@ Dialog {
         generalFont.font = dmj.generalFont
         generalUserColor.color = dmj.generalUserColor
         generalOtherColor.color = dmj.generalOtherColor
+        infoColor.color = dmj.infoColor
         medalColor.color = dmj.medalColor
         giftBackgroundColor.color = dmj.giftBackgroundColor
         borderColor.color = dmj.borderColor
@@ -170,7 +184,7 @@ Dialog {
 
     Platform.FontDialog {
         id: generalFont
-        title: "选择弹幕字体"
+        title: "选择弹幕姬的字体"
         options: Platform.FontDialog.NoButtons
         modality: Qt.NonModal
         onCurrentFontChanged: dmj.generalFont = currentFont
@@ -207,8 +221,23 @@ Dialog {
     }
 
     Platform.ColorDialog {
+        id: infoColor
+        title: "选择直播间信息的字体颜色"
+        options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        modality: Qt.NonModal
+        property bool firstRun: true
+        onCurrentColorChanged: {
+            if (firstRun) {
+                firstRun = false
+            } else {
+                dmj.infoColor = currentColor
+            }
+        }
+    }
+
+    Platform.ColorDialog {
         id: medalColor
-        title: "选择粉丝牌的字体颜色"
+        title: "选择守护徽章的字体颜色"
         options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
         modality: Qt.NonModal
         property bool firstRun: true

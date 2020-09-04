@@ -15,9 +15,10 @@ Control.ApplicationWindow {
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: Qt.Tool | Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint | Qt.WA_TranslucentBackground
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint
 
     property bool alwaysOnTop: false
+    property bool showInfo: true
     property bool mergeGift: true
     property bool highlightGift: true
     property bool banLike: false
@@ -32,6 +33,7 @@ Control.ApplicationWindow {
     property var generalFont: defaultText.font
     property var generalUserColor: "#0000ff"
     property var generalOtherColor: "#000000"
+    property var infoColor: "black"
     property var medalColor: "#aa0000"
     property var giftBackgroundColor: "#ff0000"
     property int giftPicHeight: 60
@@ -46,6 +48,7 @@ Control.ApplicationWindow {
         property alias height: dmj.height
         property alias color: dmj.color
         property alias alwaysOnTop: dmj.alwaysOnTop
+        property alias showInfo: dmj.showInfo
         property alias mergeGift: dmj.mergeGift
         property alias highlightGift: dmj.highlightGift
         property alias banLike: dmj.banLike
@@ -60,6 +63,7 @@ Control.ApplicationWindow {
         property alias generalFont: dmj.generalFont
         property alias generalUserColor: dmj.generalUserColor
         property alias generalOtherColor: dmj.generalOtherColor
+        property alias infoColor: dmj.infoColor
         property alias medalColor: dmj.medalColor
         property alias giftBackgroundColor: dmj.giftBackgroundColor
         property alias giftPicHeight: dmj.giftPicHeight
@@ -279,15 +283,48 @@ Control.ApplicationWindow {
         }
     }
 
+    Rectangle {
+        id: liveInfo
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+        height: infoText.height
+        border.color: borderColor
+        border.width: windowBorder.border.width
+        color: "transparent"
+        visible: showInfo
+
+        Text {
+            id: infoText
+            anchors.top: parent.top
+            width: parent.width
+            horizontalAlignment: Text.AlignHCenter
+            topPadding: 5
+            bottomPadding: 5
+            leftPadding: 15
+            rightPadding: 15
+            wrapMode: Text.Wrap
+            font: generalFont
+            color: infoColor
+            text: "在线人数：" + backEnd.watchingCount + "  点赞：" + backEnd.likeCount
+        }
+    }
+
     ListView {
         id: danmuList
         anchors {
-            fill: parent
-            topMargin: windowBorder.border.width + 10
+            top: showInfo ? liveInfo.bottom : parent.top
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+            topMargin: windowBorder.border.width
             bottomMargin: windowBorder.border.width + 10
             leftMargin: windowBorder.border.width
             rightMargin: windowBorder.border.width
         }
+        clip: true
         verticalLayoutDirection: ListView.BottomToTop
         spacing: 5
         model: ListModel {
@@ -296,8 +333,8 @@ Control.ApplicationWindow {
 
         delegate: Rectangle {
             width: danmuList.width
-            height: danmuText.contentHeight
-            color: "#00000000"
+            height: danmuText.height
+            color: "transparent"
 
             Rectangle {
                 id: backgroundRec
@@ -345,6 +382,7 @@ Control.ApplicationWindow {
                     left: dmj.showAvatar ? userAvatar.right : parent.left
                     right: parent.right
                 }
+                verticalAlignment: Text.AlignVCenter
                 leftPadding: dmj.showAvatar ? 5 : 15
                 rightPadding: 15
                 wrapMode: Text.Wrap
@@ -417,6 +455,12 @@ Control.ApplicationWindow {
             }
             MenuItem {
                 checkable: true
+                checked: showInfo
+                text: "显示直播间信息"
+                onTriggered: showInfo = checked
+            }
+            MenuItem {
+                checkable: true
                 checked: mergeGift
                 text: "合并显示礼物连击弹幕"
                 onTriggered: mergeGift = checked
@@ -466,7 +510,7 @@ Control.ApplicationWindow {
             MenuItem {
                 checkable: true
                 checked: showMedal
-                text: "显示粉丝牌"
+                text: "显示守护徽章"
                 onTriggered: showMedal = checked
             }
             MenuItem {
