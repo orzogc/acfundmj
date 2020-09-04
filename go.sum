@@ -87,8 +87,8 @@ github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJ
 github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 h1:Esafd1046DLDQ0W1YjYsBW+p8U2u7vzgW2SQVmlNazg=
 github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3RllmbCylyMrvgv0=
 github.com/muesli/go-app-paths v0.2.1/go.mod h1:SxS3Umca63pcFcLtbjVb+J0oD7cl4ixQWoBKhGEtEho=
-github.com/orzogc/acfundanmu v0.0.0-20200829124332-6052a1aebccd h1:J7G8COoJpTtbduxH0H7xrSQqq50ac9tQeAR3ZDlV9Xg=
-github.com/orzogc/acfundanmu v0.0.0-20200829124332-6052a1aebccd/go.mod h1:7N6TAr3vh1cp+qCObim0LvMzRESj6XWth27qYEXJfjA=
+github.com/orzogc/acfundanmu v0.0.0-20200904081438-3f9c1114ab06 h1:oqagTHvQ6X1lWoBnGYOyHJlXZijWdJDPlAoUqeCxVoQ=
+github.com/orzogc/acfundanmu v0.0.0-20200904081438-3f9c1114ab06/go.mod h1:7N6TAr3vh1cp+qCObim0LvMzRESj6XWth27qYEXJfjA=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

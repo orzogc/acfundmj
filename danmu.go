@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"time"
 
 	"github.com/go-qamel/qamel"
 	"github.com/orzogc/acfundanmu"
@@ -15,9 +16,10 @@ var cancel context.CancelFunc
 type Danmu struct {
 	qamel.QmlObject
 
-	_ func(int)    `slot:"start"`
-	_ func()       `slot:"stop"`
-	_ func(string) `signal:"newDanmu"`
+	_ func(int)            `slot:"start"`
+	_ func()               `slot:"stop"`
+	_ func(string)         `signal:"newDanmu"`
+	_ func(string, string) `signal:"newInfo"`
 }
 
 func (dm *Danmu) start(uid int) {
@@ -31,6 +33,20 @@ func (dm *Danmu) start(uid int) {
 			dm.newDanmu("停止获取弹幕")
 			return
 		}
+
+		go func() {
+			for {
+				select {
+				case <-ctx.Done():
+					return
+				default:
+					time.Sleep(5 * time.Second)
+					info := dq.GetInfo()
+					dm.newInfo(info.WatchingCount, info.LikeCount)
+				}
+			}
+		}()
+
 		for {
 			if danmu := dq.GetDanmu(); danmu != nil {
 				for _, d := range danmu {

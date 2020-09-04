@@ -75,6 +75,19 @@ Dialog {
             leftPadding: 20
             Text {
                 anchors.verticalCenter: parent.verticalCenter
+                text: "粉丝牌的字体颜色："
+            }
+            Button {
+                text: "设置"
+                onClicked: medalColor.open()
+            }
+        }
+
+        Row {
+            spacing: 10
+            leftPadding: 20
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
                 text: "礼物弹幕高亮显示的背景颜色："
             }
             Button {
@@ -134,6 +147,7 @@ Dialog {
         generalFont.font = dmj.generalFont
         generalUserColor.color = dmj.generalUserColor
         generalOtherColor.color = dmj.generalOtherColor
+        medalColor.color = dmj.medalColor
         giftBackgroundColor.color = dmj.giftBackgroundColor
         borderColor.color = dmj.borderColor
     }
@@ -188,6 +202,21 @@ Dialog {
                 firstRun = false
             } else {
                 dmj.generalOtherColor = currentColor
+            }
+        }
+    }
+
+    Platform.ColorDialog {
+        id: medalColor
+        title: "选择粉丝牌的字体颜色"
+        options: Platform.ColorDialog.ShowAlphaChannel | Platform.ColorDialog.NoButtons
+        modality: Qt.NonModal
+        property bool firstRun: true
+        onCurrentColorChanged: {
+            if (firstRun) {
+                firstRun = false
+            } else {
+                dmj.medalColor = currentColor
             }
         }
     }

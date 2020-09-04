@@ -15,7 +15,7 @@ Control.ApplicationWindow {
     minimumWidth: 100
     minimumHeight: 100
     color: "#00000000"
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint | Qt.WA_OpaquePaintEvent
+    flags: Qt.Tool | Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint | Qt.WA_TranslucentBackground
 
     property bool alwaysOnTop: false
     property bool mergeGift: true
@@ -26,11 +26,13 @@ Control.ApplicationWindow {
     property bool banGift: false
     property bool showPic: true
     property bool showAvatar: true
+    property bool showMedal: true
     property bool autoScroll: true
 
     property var generalFont: defaultText.font
     property var generalUserColor: "#0000ff"
     property var generalOtherColor: "#000000"
+    property var medalColor: "#aa0000"
     property var giftBackgroundColor: "#ff0000"
     property int giftPicHeight: 60
     property var borderColor: "black"
@@ -52,11 +54,13 @@ Control.ApplicationWindow {
         property alias banGift: dmj.banGift
         property alias showPic: dmj.showPic
         property alias showAvatar: dmj.showAvatar
+        property alias showMedal: dmj.showMedal
         property alias autoScroll: dmj.autoScroll
         property alias uid: setUID.uid
         property alias generalFont: dmj.generalFont
         property alias generalUserColor: dmj.generalUserColor
         property alias generalOtherColor: dmj.generalOtherColor
+        property alias medalColor: dmj.medalColor
         property alias giftBackgroundColor: dmj.giftBackgroundColor
         property alias giftPicHeight: dmj.giftPicHeight
         property alias borderColor: dmj.borderColor
@@ -96,10 +100,19 @@ Control.ApplicationWindow {
 
     BackEnd.Danmu {
         id: backEnd
+
+        property string watchingCount: ""
+        property string likeCount: ""
+
         property bool started: false
         property int comboNum: 0
         property var comboGift: new Map()
         property var timers: []
+
+        onNewInfo: function(watching, like) {
+            watchingCount = watching
+            likeCount = like
+        }
 
         onNewDanmu: function(danmu) {
             var data
@@ -112,7 +125,7 @@ Control.ApplicationWindow {
                 }
                 danmuModel.insert(0, {avatar: "",
                                       bgColor: false,
-                                      time: 0, uid: 0, cid: "",
+                                      time: 0, uid: 0, cid: "", fansMedal: "",
                                       danmuUser: danmu,
                                       danmuOther: "", image: "",
                                       animation: false})
@@ -125,6 +138,7 @@ Control.ApplicationWindow {
                                       time: data.SendTime,
                                       uid: data.UserID,
                                       cid: "",
+                                      fansMedal: data.Medal.ClubName === "" ? "" : data.Medal.ClubName + " " + data.Medal.Level + " ",
                                       danmuUser: data.Nickname,
                                       danmuOther: "：" + data.Comment,
                                       image: "",
@@ -137,6 +151,7 @@ Control.ApplicationWindow {
                                           time: data.SendTime,
                                           uid: data.UserID,
                                           cid: "",
+                                          fansMedal: data.Medal.ClubName === "" ? "" : data.Medal.ClubName + " " + data.Medal.Level + " ",
                                           danmuUser: data.Nickname,
                                           danmuOther: " 点赞了",
                                           image: "",
@@ -150,6 +165,7 @@ Control.ApplicationWindow {
                                           time: data.SendTime,
                                           uid: data.UserID,
                                           cid: "",
+                                          fansMedal: data.Medal.ClubName === "" ? "" : data.Medal.ClubName + " " + data.Medal.Level + " ",
                                           danmuUser: data.Nickname,
                                           danmuOther: " 进入直播间",
                                           image: "",
@@ -163,6 +179,7 @@ Control.ApplicationWindow {
                                           time: data.SendTime,
                                           uid: data.UserID,
                                           cid: "",
+                                          fansMedal: data.Medal.ClubName === "" ? "" : data.Medal.ClubName + " " + data.Medal.Level + " ",
                                           danmuUser: data.Nickname,
                                           danmuOther: " 关注了主播",
                                           image: "",
@@ -176,6 +193,7 @@ Control.ApplicationWindow {
                                           time: data.SendTime,
                                           uid: data.UserID,
                                           cid: "",
+                                          fansMedal: data.Medal.ClubName === "" ? "" : data.Medal.ClubName + " " + data.Medal.Level + " ",
                                           danmuUser: data.Nickname,
                                           danmuOther: " 送出 " + data.BananaCount + " 个香蕉",
                                           image: "",
@@ -196,6 +214,7 @@ Control.ApplicationWindow {
                                                time: data.SendTime,
                                                uid: data.UserID,
                                                cid: data.Gift.ComboID,
+                                               fansMedal: data.Medal.ClubName === "" ? "" : data.Medal.ClubName + " " + data.Medal.Level + " ",
                                                danmuUser: data.Nickname,
                                                danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                                image: data.Gift.SmallPngPic,
@@ -215,6 +234,7 @@ Control.ApplicationWindow {
                                     break
                                 }
                             }
+                            // 动态创建一个计时器
                             var timer = Qt.createQmlObject(`import QtQuick 2.15;Timer{id:danmuTimer;interval:3500;property var comboID;property var index;onTriggered:{danmuModel.move(index,backEnd.comboNum-1,1);backEnd.comboNum--;backEnd.comboGift.delete(comboID);backEnd.timers.splice(index,1);for(let [u,c] of backEnd.comboGift){if(c>index){backEnd.comboGift.set(u,c-1)}}for(var i in backEnd.timers){if(i>=index){backEnd.timers[i].index=i}}danmuTimer.destroy();}}`,
                                                            backEnd, "")
                             timer.comboID = data.Gift.ComboID
@@ -226,6 +246,7 @@ Control.ApplicationWindow {
                                                   time: data.SendTime,
                                                   uid: data.UserID,
                                                   cid: data.Gift.ComboID,
+                                                  fansMedal: data.Medal.ClubName === "" ? "" : data.Medal.ClubName + " " + data.Medal.Level + " ",
                                                   danmuUser: data.Nickname,
                                                   danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                                   image: data.Gift.SmallPngPic,
@@ -240,6 +261,7 @@ Control.ApplicationWindow {
                                               time: data.SendTime,
                                               uid: data.UserID,
                                               cid: data.Gift.ComboID,
+                                              fansMedal: data.Medal.ClubName === "" ? "" : data.Medal.ClubName + " " + data.Medal.Level + " ",
                                               danmuUser: data.Nickname,
                                               danmuOther: " 送出 "+ (data.Gift.Count * data.Gift.Combo) + " 个" + data.Gift.Name,
                                               image: data.Gift.SmallPngPic,
@@ -312,7 +334,7 @@ Control.ApplicationWindow {
                     leftMargin: 15
                     verticalCenter: parent.verticalCenter
                 }
-                source: avatar
+                source: dmj.showAvatar ? avatar : ""
                 visible: dmj.showAvatar
             }
 
@@ -329,12 +351,14 @@ Control.ApplicationWindow {
                 textFormat: Text.RichText
                 font: generalFont
 
-                property string imgstyle: `<style>img{vertical-align:bottom;}`
+                property string imgStyle: `<style>img{vertical-align:bottom;}`
+                property string medalStyle: `medal{color:${dmj.medalColor};}`
                 property string userStyle: `user{color:${dmj.generalUserColor};}`
                 property string otherStyle: `other{color:${dmj.generalOtherColor};}</style>`
+                property string medalStr: showMedal ? fansMedal : ""
                 property string imageStr: image === "" || !dmj.showPic ? "" : `<img src="` + image + `" height="` + dmj.giftPicHeight + `">`
 
-                text: imgstyle + userStyle + otherStyle + `<user>` + danmuUser + `</user><other>` + danmuOther +`</other>` + imageStr
+                text: imgStyle + medalStyle + userStyle + otherStyle + `<medal>` + medalStr + `</medal><user>` + danmuUser + `</user><other>` + danmuOther +`</other>` + imageStr
             }
         }
     }
@@ -362,7 +386,8 @@ Control.ApplicationWindow {
     }
 
     MouseArea {
-        anchors.fill: danmuList
+        anchors.fill: parent
+        anchors.margins: windowBorder.border.width
         acceptedButtons: Qt.RightButton
         onClicked: rightClickMenu.open()
 
@@ -437,6 +462,12 @@ Control.ApplicationWindow {
                 checked: showAvatar
                 text: "显示弹幕用户头像"
                 onTriggered: showAvatar = checked
+            }
+            MenuItem {
+                checkable: true
+                checked: showMedal
+                text: "显示粉丝牌"
+                onTriggered: showMedal = checked
             }
             MenuItem {
                 checkable: true
