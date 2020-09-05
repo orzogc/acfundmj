@@ -291,7 +291,7 @@ Control.ApplicationWindow {
             right: parent.right
         }
         height: infoText.height
-        border.color: borderColor
+        border.color: showBorder ? borderColor : "transparent"
         border.width: windowBorder.border.width
         color: "transparent"
         visible: showInfo
@@ -308,7 +308,7 @@ Control.ApplicationWindow {
             wrapMode: Text.Wrap
             font: generalFont
             color: infoColor
-            text: "在线人数：" + backEnd.watchingCount + "  点赞：" + backEnd.likeCount
+            text: "在线：" + backEnd.watchingCount + "  点赞：" + backEnd.likeCount
         }
     }
 
