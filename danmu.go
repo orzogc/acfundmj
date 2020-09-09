@@ -27,7 +27,7 @@ func (dm *Danmu) start(uid int) {
 		var ctx context.Context
 		ctx, cancel = context.WithCancel(context.Background())
 		defer cancel()
-		dq, err := acfundanmu.Start(ctx, uid)
+		dq, err := acfundanmu.Start(ctx, uid, nil)
 		if err != nil {
 			log.Printf("获取弹幕出现错误：%v", err)
 			dm.newDanmu("停止获取弹幕")
